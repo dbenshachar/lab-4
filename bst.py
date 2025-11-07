@@ -55,8 +55,31 @@ class BinarySearchTree(Generic[T]):
     
     def delete(self, val : T) -> "BinarySearchTree":
         """Returns Binary Search Tree with val deleted."""
-        ...
-
+        def _delete(tree: BinTree, val: T) -> BinTree:
+            if not tree: return None
+            
+            if self.comes_before(tree.val, val):
+                return Node(tree.val, tree.left, _delete(tree.right, val))
+            elif self.comes_before(val, tree.val):
+                return Node(tree.val, _delete(tree.left, val), tree.right)
+            
+            if tree.left is None:
+                return tree.right
+            if tree.right is None:
+                return tree.left
+                        
+            max_node = tree.left
+            while max_node.right:
+                max_node = max_node.right
+            
+            return Node(
+                max_node.val,
+                _delete(tree.left, max_node.val),
+                tree.right
+            )
+        
+        return BinarySearchTree[T](self.comes_before, _delete(self.tree, val))
+    
     @property
     def height(self) -> int:
         """Returns the height of the tree."""
