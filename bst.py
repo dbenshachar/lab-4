@@ -26,8 +26,15 @@ class BinarySearchTree(Generic[T]):
     def insert(self, val : T) -> "BinarySearchTree[T]":
         """Returns Binary Search Tree with val inserted."""
         def _insert(tree : BinTree, val : T) -> BinTree:
-            if tree is None:
+            if not tree:
                 return Node(val, None, None)
+            
+            if self.comes_before(tree.val, val):
+                return Node(tree.val, tree.left, _insert(tree.right, val))
+            elif self.comes_before(val, tree.val):
+                return Node(tree.val, _insert(tree.left, val), tree.right)
+            
+            raise ValueError("Duplicates not allowed in Binary Search Tree")
 
         return BinarySearchTree[T](self.comes_before, _insert(self.tree, val))
     

@@ -35,5 +35,23 @@ class BSTTests(unittest.TestCase):
         self.assertEqual(self.bst_seven.lookup(1), True)
         self.assertEqual(self.bst_seven.lookup(7), True)
     
+    def test_insert(self):
+        self.assertEqual(self.bst_empty.insert(1).tree, Node(1, None, None))
+        self.assertEqual(self.bst_one.insert(0).tree, Node(1, Node(0, None, None), None))
+        self.assertEqual(self.bst_one.insert(2).tree, Node(1, None, Node(2, None, None)))
+
+        self.assertEqual(self.bst_seven.insert(0).tree, Node(1, 
+                                                            Node(2,
+                                                                Node(4, Node(0, None, None), None),
+                                                                Node(5, None, None)),
+                                                            Node(3,
+                                                                Node(6, None, None),
+                                                                Node(7, None, None))))
+        
+        with self.assertRaises(ValueError):
+            self.bst_one.insert(1)
+            self.bst_seven.insert(4)
+            self.bst_seven.insert(7)
+    
 if (__name__ == '__main__'):
     unittest.main()
